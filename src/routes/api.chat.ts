@@ -14,7 +14,8 @@ export const Route = createFileRoute('/api/chat')({
         try {
           const { messages } = await request.json()
 
-          const apiKey = process.env.MISTRAL_API_KEY
+          const apiKey = (globalThis as any).__MISTRAL_KEY__ || process.env.Mistral_API_Kodex
+
           if (!apiKey) {
             return new Response(
               JSON.stringify({ error: 'MISTRAL_API_KEY not configured' }),
@@ -57,7 +58,6 @@ export const Route = createFileRoute('/api/chat')({
             )
           }
 
-          // Proxy the Mistral SSE stream directly
           return new Response(mistralRes.body, {
             headers: {
               'Content-Type': 'text/event-stream',
