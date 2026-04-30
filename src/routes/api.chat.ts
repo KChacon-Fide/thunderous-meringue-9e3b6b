@@ -14,10 +14,10 @@ export const Route = createFileRoute('/api/chat')({
         try {
           const { messages } = await request.json()
 
-          const apiKey = process.env.MISTRAL_API_KEY
+          const apiKey = process.env.Mistral_IA_Kodex
           if (!apiKey) {
             return new Response(
-              JSON.stringify({ error: 'MISTRAL_API_KEY not configured' }),
+              JSON.stringify({ error: 'Mistral_IA_Kodex not configured' }),
               { status: 500, headers: { 'Content-Type': 'application/json' } },
             )
           }
