@@ -1,9 +1,12 @@
 import { useCallback, useRef, useState } from 'react'
 
+export type MessageFeedback = 'like' | 'dislike' | null
+
 export type Message = {
   id: string
   role: 'user' | 'assistant'
   content: string
+  feedback?: MessageFeedback
 }
 
 export function useKodexChat() {
@@ -16,8 +19,24 @@ export function useKodexChat() {
     setIsLoading(false)
   }, [])
 
+  const clearMessages = useCallback(() => {
+    setMessages([])
+  }, [])
+
+  const restoreMessages = useCallback((msgs: Message[]) => {
+    setMessages(msgs)
+  }, [])
+
+  const setFeedback = useCallback((id: string, feedback: 'like' | 'dislike') => {
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === id ? { ...m, feedback: m.feedback === feedback ? null : feedback } : m
+      )
+    )
+  }, [])
+
   const sendMessage = useCallback(
-    async (text: string) => {
+    async (text: string, historyOverride?: Message[]) => {
       const userMsg: Message = {
         id: crypto.randomUUID(),
         role: 'user',
@@ -31,15 +50,16 @@ export function useKodexChat() {
         content: '',
       }
 
-      setMessages((prev) => [...prev, userMsg, assistantMsg])
+      const baseHistory = historyOverride ?? messages
+
+      setMessages([...baseHistory, userMsg, assistantMsg])
       setIsLoading(true)
 
       const controller = new AbortController()
       abortRef.current = controller
 
       try {
-        // Build the messages array for the API (exclude the empty assistant placeholder)
-        const history = [...messages, userMsg].map((m) => ({
+        const history = [...baseHistory, userMsg].map((m) => ({
           role: m.role,
           content: m.content,
         }))
@@ -51,9 +71,7 @@ export function useKodexChat() {
           signal: controller.signal,
         })
 
-        if (!res.ok || !res.body) {
-          throw new Error(`HTTP ${res.status}`)
-        }
+        if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`)
 
         const reader = res.body.getReader()
         const decoder = new TextDecoder()
@@ -79,10 +97,8 @@ export function useKodexChat() {
               if (delta) {
                 setMessages((prev) =>
                   prev.map((m) =>
-                    m.id === assistantId
-                      ? { ...m, content: m.content + delta }
-                      : m,
-                  ),
+                    m.id === assistantId ? { ...m, content: m.content + delta } : m
+                  )
                 )
               }
             } catch {
@@ -95,21 +111,27 @@ export function useKodexChat() {
           setMessages((prev) =>
             prev.map((m) =>
               m.id === assistantId
-                ? {
-                    ...m,
-                    content:
-                      'An error occurred while processing your request. Please try again.',
-                  }
-                : m,
-            ),
+                ? { ...m, content: 'An error occurred while processing your request. Please try again.' }
+                : m
+            )
           )
         }
       } finally {
         setIsLoading(false)
       }
     },
-    [messages],
+    [messages]
   )
 
-  return { messages, sendMessage, isLoading, stop }
+  const editAndResend = useCallback(
+    (id: string, newText: string) => {
+      const idx = messages.findIndex((m) => m.id === id)
+      if (idx === -1) return
+      const trimmedHistory = messages.slice(0, idx)
+      sendMessage(newText, trimmedHistory)
+    },
+    [messages, sendMessage]
+  )
+
+  return { messages, sendMessage, editAndResend, setFeedback, isLoading, stop, clearMessages, restoreMessages }
 }

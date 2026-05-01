@@ -1,8 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 const SYSTEM_PROMPT =
-  'You are KODEX IA, an intelligent and efficient assistant created by Kodex Tech Solutions. You give clear, concise and accurate answers. You are professional, direct and helpful. Avoid unnecessary filler text.'
-
+  'You are KODEX IA, a professional and intelligent assistant created by Kodex Tech Solutions. ' +
+  'Always respond in the same language the user writes in. ' +
+  'Never use emojis under any circumstance. ' +
+  'Keep greetings and short questions brief and direct — one or two sentences maximum. ' +
+  'For detailed requests, write long well-structured responses with headers, numbered lists and proper paragraphs. ' +
+  'Never end responses with phrases like "Do you need more info?" or "I am here to help" or similar. ' +
+  'Use proper punctuation always. Be human, clear and professional in tone.'
 export const Route = createFileRoute('/api/chat')({
   server: {
     handlers: {
@@ -43,7 +48,7 @@ export const Route = createFileRoute('/api/chat')({
                 model: 'mistral-small-latest',
                 messages: mistralMessages,
                 temperature: 0.5,
-                max_tokens: 800,
+                max_tokens: 8192,
                 stream: true,
               }),
               signal: request.signal,
