@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
-    "build": "vite build"
+    "build": "vite build",
+    "start": "node dist/server/server.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
@@ -33,7 +34,6 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
-    "@netlify/vite-plugin-tanstack-start": "1.3.7",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/devtools-vite": "^0.5.2",
     "@types/node": "^22.10.2",
