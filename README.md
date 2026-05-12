@@ -1,63 +1,91 @@
-# KODEX IA
+# DEXSO IA
 
-An enterprise-grade AI chat assistant built for Kodex Tech Solutions. Features a sleek dark-themed interface with streaming responses powered by the Mistral API, deployed on Netlify.
+<p align="center">
+  <strong>Conversational Artificial Intelligence Platform</strong><br/>
+  Developed by <strong>Kodex Tech Solutions</strong>
+</p>
 
-## Tech Stack
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-In%20Development-c8a65a?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Product-DEXSO%20IA-0d0d0d?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Company-Kodex%20Tech%20Solutions-f3ede2?style=for-the-badge&labelColor=0d0d0d" />
+</p>
 
-| Layer | Technology |
-|-------|------------|
-| Framework | TanStack Start (React 19 + TanStack Router v1) |
-| Build | Vite 7 |
-| Styling | Tailwind CSS 4 + custom CSS design system |
-| AI Backend | Mistral API (`mistral-small-latest`) |
-| Deployment | Netlify (serverless functions via TanStack Start API routes) |
-| Language | TypeScript 5.7 (strict mode) |
+---
 
-## Running Locally
+## About DEXSO IA
 
-### Prerequisites
+**DEXSO IA** is a conversational artificial intelligence assistant developed as part of the technological ecosystem of **Kodex Tech Solutions**.
 
-- Node.js 22+
-- A [Mistral API key](https://console.mistral.ai/)
+The project is designed as a modern AI platform focused on productivity, business support, technical assistance, document interaction, and intelligent communication through a clean, responsive, and professional interface.
 
-### Setup
+DEXSO IA combines a full-stack web architecture, real-time response streaming, user authentication, persistent conversation management, file-aware interaction, voice-oriented tools, and a custom visual identity created specifically for the product.
 
-```bash
-npm install
-```
+---
 
-Create a `.env` file in the project root:
+## Purpose
 
-```
-MISTRAL_API_KEY=your_mistral_api_key_here
-```
+The main objective of DEXSO IA is to provide a professional, scalable, and accessible artificial intelligence experience for users and organizations.
 
-### Development
+The platform is being developed with a product-oriented vision, allowing future growth into business plans, enterprise customization, multimodal interaction, advanced document analysis, and intelligent workflow automation.
 
-```bash
-npm run dev
-```
+---
 
-The app runs at [http://localhost:3000](http://localhost:3000). When deployed to Netlify, use the Netlify CLI for local emulation:
+## Key Features
 
-```bash
-netlify dev
-```
+| Feature | Description |
+|--------|-------------|
+| Conversational AI | Intelligent chat experience with natural language interaction |
+| Real-Time Responses | Streamed answers for a smoother and faster user experience |
+| User Authentication | Login and user-based access flow |
+| Conversation History | Persistent conversations for authenticated users |
+| Guest Mode | Temporary chat experience without account storage |
+| Multiple Chats | Create, rename, load, pin, and delete conversations |
+| Message Tools | Edit messages, regenerate answers, copy content, and provide feedback |
+| Markdown Support | Structured responses with headings, lists, formatting, and code blocks |
+| File Interaction | Support for reading and processing attached documents |
+| Voice Features | Voice-oriented interface elements for a more natural experience |
+| Responsive Design | Interface adapted for desktop and mobile usage |
+| Brand Identity | Custom DEXSO IA visual system with a premium and minimal design |
 
-This starts the dev server on port 8888 with full Netlify feature emulation.
+---
 
-### Production Build
+## Technology Stack
 
-```bash
-npm run build
-```
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19-0d0d0d?style=for-the-badge&logo=react" />
+  <img src="https://img.shields.io/badge/TypeScript-5.7-0d0d0d?style=for-the-badge&logo=typescript" />
+  <img src="https://img.shields.io/badge/TanStack-Start-c8a65a?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Vite-7-0d0d0d?style=for-the-badge&logo=vite" />
+  <img src="https://img.shields.io/badge/TailwindCSS-4-c8a65a?style=for-the-badge&logo=tailwindcss" />
+</p>
 
-## Environment Variables
+| Area | Technology |
+|------|------------|
+| Frontend | React 19 |
+| Full-Stack Framework | TanStack Start |
+| Routing | TanStack Router |
+| Build Tool | Vite 7 |
+| Main Language | TypeScript |
+| Styling | Tailwind CSS 4 + Custom CSS |
+| UI Components | Custom components |
+| Icons | Lucide React |
+| Markdown Rendering | React Markdown |
+| Authentication & Data | Supabase |
+| File Processing | PDF.js, Mammoth |
+| Runtime / Deployment | Cloudflare + Wrangler |
+| Validation | Zod |
+| Package Manager | npm |
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `MISTRAL_API_KEY` | Yes | Mistral API key for AI responses |
+---
 
-## Deployment
+## Technology Distribution
 
-The app is configured for Netlify deployment via `netlify.toml`. Push to your connected repository branch to trigger an automatic deploy. Ensure `MISTRAL_API_KEY` is set in your Netlify site environment variables.
+Approximate distribution of the main technologies used in the project:
+
+```txt
+TypeScript / TSX        ██████████████████████████████  60%
+CSS / Tailwind          ██████████                      20%
+Server Logic            █████                           10%
+AI Interaction Layer    ██                              5%
+Configuration / Tooling ██                              5%
