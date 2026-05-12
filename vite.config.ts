@@ -1,35 +1,23 @@
-import { defineConfig, loadEnv } from 'vite'
+import { cloudflare } from '@cloudflare/vite-plugin'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
-import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vite'
+import viteTsConfigPaths from 'vite-tsconfig-paths'
 
-const config = defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
-  const mistralKey = env['Mistral_API_Kodex'] || ''
-
-  console.log('Mistral key encontrada:', mistralKey ? 'SÍ ✅' : 'NO ❌')
-
-  return {
-    define: {
-      'globalThis.__MISTRAL_KEY__': JSON.stringify(mistralKey),
-    },
-    server: {
-      hmr: true,
-    },
-    plugins: [
-      viteTsConfigPaths({
-        projects: ['./tsconfig.json'],
-      }),
-      tailwindcss(),
-      tanstackStart({
-        server: {
-          preset: 'node', // 🔥 CLAVE PARA RAILWAY
-        },
-      }),
-      viteReact(),
-    ],
-  }
+const config = defineConfig({
+  server: {
+    hmr: true,
+  },
+  plugins: [
+    cloudflare({ viteEnvironment: { name: 'ssr' } }),
+    viteTsConfigPaths({
+      projects: ['./tsconfig.json'],
+    }),
+    tailwindcss(),
+    tanstackStart(),
+    viteReact(),
+  ],
 })
 
 export default config

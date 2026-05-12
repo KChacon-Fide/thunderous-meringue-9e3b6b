@@ -5,9 +5,12 @@
   "scripts": {
     "dev": "vite dev --port 3000",
     "build": "vite build",
-    "start": "node dist/server/server.js"
+    "preview": "vite preview",
+    "deploy": "npm run build && wrangler deploy",
+    "cf-typegen": "wrangler types"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.105.1",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/ai": "0.10.3",
     "@tanstack/ai-anthropic": "0.7.4",
@@ -25,6 +28,8 @@
     "@tanstack/store": "0.10.0",
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.576.0",
+    "mammoth": "^1.12.0",
+    "pdfjs-dist": "^5.7.284",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-markdown": "^10.1.0",
@@ -34,6 +39,8 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.36.3",
+    "@netlify/vite-plugin-tanstack-start": "1.3.7",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/devtools-vite": "^0.5.2",
     "@types/node": "^22.10.2",
@@ -44,6 +51,7 @@
     "rimraf": "^6.0.1",
     "tailwindcss": "^4.0.6",
     "typescript": "^5.7.2",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "wrangler": "^4.90.0"
   }
 }

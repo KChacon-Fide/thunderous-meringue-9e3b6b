@@ -13,17 +13,26 @@ export function useKodexChat() {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const abortRef = useRef<AbortController | null>(null)
+  const activeConvRef = useRef<string>('')
 
   const stop = useCallback(() => {
     abortRef.current?.abort()
+    abortRef.current = null
     setIsLoading(false)
   }, [])
 
   const clearMessages = useCallback(() => {
+    abortRef.current?.abort()
+    abortRef.current = null
+    setIsLoading(false)
     setMessages([])
   }, [])
 
-  const restoreMessages = useCallback((msgs: Message[]) => {
+  const restoreMessages = useCallback((msgs: Message[], convId: string) => {
+    abortRef.current?.abort()
+    abortRef.current = null
+    setIsLoading(false)
+    activeConvRef.current = convId
     setMessages(msgs)
   }, [])
 
@@ -36,8 +45,15 @@ export function useKodexChat() {
   }, [])
 
   const sendMessage = useCallback(
-    async (text: string, historyOverride?: Message[]) => {
-      const userMsg: Message = {
+    async (
+      text: string,
+      historyOverride?: Message[],
+      convId?: string,
+      preparedUserMessage?: Message
+    ) => {
+      const sessionConvId = convId ?? activeConvRef.current
+
+      const userMsg: Message = preparedUserMessage ?? {
         id: crypto.randomUUID(),
         role: 'user',
         content: text,
@@ -51,10 +67,11 @@ export function useKodexChat() {
       }
 
       const baseHistory = historyOverride ?? messages
-
       setMessages([...baseHistory, userMsg, assistantMsg])
       setIsLoading(true)
 
+      // Cancelar request anterior si existe
+      abortRef.current?.abort()
       const controller = new AbortController()
       abortRef.current = controller
 
@@ -80,6 +97,9 @@ export function useKodexChat() {
         while (true) {
           const { done, value } = await reader.read()
           if (done) break
+
+          // Si cambió la conversación activa, abandonar este stream
+          if (activeConvRef.current !== sessionConvId) break
 
           buffer += decoder.decode(value, { stream: true })
           const lines = buffer.split('\n')
@@ -117,7 +137,10 @@ export function useKodexChat() {
           )
         }
       } finally {
-        setIsLoading(false)
+        if (abortRef.current === controller) {
+          setIsLoading(false)
+          abortRef.current = null
+        }
       }
     },
     [messages]
@@ -127,11 +150,14 @@ export function useKodexChat() {
     (id: string, newText: string) => {
       const idx = messages.findIndex((m) => m.id === id)
       if (idx === -1) return
-      const trimmedHistory = messages.slice(0, idx)
-      sendMessage(newText, trimmedHistory)
+      sendMessage(newText, messages.slice(0, idx))
     },
     [messages, sendMessage]
   )
 
-  return { messages, sendMessage, editAndResend, setFeedback, isLoading, stop, clearMessages, restoreMessages }
+  const setActiveConv = useCallback((convId: string) => {
+    activeConvRef.current = convId
+  }, [])
+
+  return { messages, sendMessage, editAndResend, setFeedback, isLoading, stop, clearMessages, restoreMessages, setActiveConv }
 }

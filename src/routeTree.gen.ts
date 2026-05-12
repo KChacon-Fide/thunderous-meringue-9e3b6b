@@ -9,12 +9,37 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiTranscribeRouteImport } from './routes/api.transcribe'
+import { Route as ApiParseFileRouteImport } from './routes/api.parse-file'
 import { Route as ApiChatRouteImport } from './routes/api.chat'
+import { Route as ApiAuthCodeRouteImport } from './routes/api.auth-code'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTranscribeRoute = ApiTranscribeRouteImport.update({
+  id: '/api/transcribe',
+  path: '/api/transcribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiParseFileRoute = ApiParseFileRouteImport.update({
+  id: '/api/parse-file',
+  path: '/api/parse-file',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
@@ -22,40 +47,115 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthCodeRoute = ApiAuthCodeRouteImport.update({
+  id: '/api/auth-code',
+  path: '/api/auth-code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/api/auth-code': typeof ApiAuthCodeRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/parse-file': typeof ApiParseFileRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/api/auth-code': typeof ApiAuthCodeRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/parse-file': typeof ApiParseFileRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/api/auth-code': typeof ApiAuthCodeRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/parse-file': typeof ApiParseFileRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/chat'
+  fullPaths:
+    | '/'
+    | '/profile'
+    | '/settings'
+    | '/api/auth-code'
+    | '/api/chat'
+    | '/api/parse-file'
+    | '/api/transcribe'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/chat'
-  id: '__root__' | '/' | '/api/chat'
+  to:
+    | '/'
+    | '/profile'
+    | '/settings'
+    | '/api/auth-code'
+    | '/api/chat'
+    | '/api/parse-file'
+    | '/api/transcribe'
+  id:
+    | '__root__'
+    | '/'
+    | '/profile'
+    | '/settings'
+    | '/api/auth-code'
+    | '/api/chat'
+    | '/api/parse-file'
+    | '/api/transcribe'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ProfileRoute: typeof ProfileRoute
+  SettingsRoute: typeof SettingsRoute
+  ApiAuthCodeRoute: typeof ApiAuthCodeRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiParseFileRoute: typeof ApiParseFileRoute
+  ApiTranscribeRoute: typeof ApiTranscribeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/transcribe': {
+      id: '/api/transcribe'
+      path: '/api/transcribe'
+      fullPath: '/api/transcribe'
+      preLoaderRoute: typeof ApiTranscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/parse-file': {
+      id: '/api/parse-file'
+      path: '/api/parse-file'
+      fullPath: '/api/parse-file'
+      preLoaderRoute: typeof ApiParseFileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/chat': {
@@ -65,12 +165,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth-code': {
+      id: '/api/auth-code'
+      path: '/api/auth-code'
+      fullPath: '/api/auth-code'
+      preLoaderRoute: typeof ApiAuthCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ProfileRoute: ProfileRoute,
+  SettingsRoute: SettingsRoute,
+  ApiAuthCodeRoute: ApiAuthCodeRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiParseFileRoute: ApiParseFileRoute,
+  ApiTranscribeRoute: ApiTranscribeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

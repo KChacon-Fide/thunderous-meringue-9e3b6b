@@ -1,5 +1,6 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 
+import { getInitialAppearanceScript } from '@/lib/appearance'
 import '../styles.css'
 
 export const Route = createRootRoute({
@@ -19,6 +20,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: getInitialAppearanceScript() }} />
       </head>
       <body>
         {children}
